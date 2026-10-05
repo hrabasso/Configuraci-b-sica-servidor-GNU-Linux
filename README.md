@@ -6,7 +6,7 @@ Primer executem la comanda `ip a` per consultar les adreces IP de la màquina vi
 
 La interfície `enp0s8`, amb l'adreça `192.168.56.101`, correspon a la xarxa **host-only** i és la que utilitzarem per connectar-nos des de l'equip Windows.
 
-![Comprovació de les adreces IP](./img/img1.png)
+![Comprovació de les adreces IP](./img/img2.png)
 
 ## 1.2 Connexió SSH des de Windows
 
@@ -18,11 +18,11 @@ ssh user@192.168.56.101
 
 En ser la primera connexió, apareix un avís indicant que l'autenticitat de l'equip no és coneguda. Acceptem la clau escrivint `yes` i continuem amb la connexió.
 
-![Primera connexió SSH](./img/img2.png)
+![Primera connexió SSH](./img/img3.png)
 
 Després d'acceptar la clau, introduïm la contrasenya de l'usuari per completar la connexió remota.
 
-![Acceptació de la clau SSH](./img/img3.png)
+![Acceptació de la clau SSH](./img/img4.png)
 
 # 2. Actualitzacions del sistema
 
@@ -32,7 +32,7 @@ Abans de realitzar l'actualització del sistema, comprovem la situació dels paq
 
 També es mostra que el servei SSH ja estava instal·lat i en la seva versió més recent.
 
-![Comprovació dels paquets del sistema](./img/img4.png)
+![Comprovació dels paquets del sistema](./img/img5.png)
 
 ## 2.2 Simulació de l'actualització
 
@@ -44,7 +44,7 @@ apt -s upgrade
 
 La comanda realitza una simulació de l'actualització sense modificar el sistema. En el resultat es mostra que hi ha **13 paquets per actualitzar** i no s'hi observa cap conflicte de dependències que impedeixi l'actualització.
 
-![Simulació de l'actualització](./img/img5.png)
+![Simulació de l'actualització](./img/img6.png)
 
 # 3. Canviant el nom de l'equip
 
@@ -58,7 +58,7 @@ hostnamectl
 
 Inicialment, el nom estàtic de l'equip és `server` i el nom descriptiu és `computer-vm`.
 
-![Configuració inicial del hostname](./img/img6.png)
+![Configuració inicial del hostname](./img/img7.png)
 
 ## 3.2 Canviar el nom de l'equip
 
@@ -80,7 +80,7 @@ La primera vegada apareix un error perquè el nom descriptiu conté diversos arg
 sudo hostnamectl set-icon-name "Servidor de Hector Rabasso"
 ```
 
-![Canvi del hostname i del nom descriptiu](./img/img7.png)
+![Canvi del hostname i del nom descriptiu](./img/img8.png)
 
 ## 3.3 Comprovar la nova configuració
 
@@ -92,7 +92,7 @@ hostnamectl
 
 Ara podem comprovar que el **Static hostname** és `sox-hrl` i que el **Icon name** és `Servidor de Hector Rabasso`.
 
-![Comprovació del nou hostname](./img/img8.png)
+![Comprovació del nou hostname](./img/img9.png)
 
 ## 3.4 Comprovar la comanda hostname
 
@@ -110,7 +110,7 @@ sox-hrl
 
 La comanda `hostname` mostra directament el nom actual de l'equip, mentre que `hostnamectl` mostra informació més completa sobre el sistema i la configuració del hostname.
 
-![Comanda hostname](./img/img9.png)
+![Comanda hostname](./img/img10.png)
 
 ## 3.5 Configuració del fitxer /etc/hosts
 
@@ -129,7 +129,7 @@ Afegim la correspondència entre l'adreça local i el nom complet de l'equip:
 
 D'aquesta manera, el sistema pot resoldre correctament el nom de l'equip i el seu domini.
 
-![Configuració del fitxer /etc/hosts](./img/img10.png)
+![Configuració del fitxer /etc/hosts](./img/img11.png)
 
 ## 3.6 Comprovar hostname i hostname -f
 
@@ -159,7 +159,7 @@ sox-hrl.sox.test
 
 La diferència és que `hostname` mostra únicament el nom de l'equip, mentre que `hostname -f` mostra el **nom de domini complet (FQDN)**.
 
-![Comprovació del hostname i FQDN](./img/img11.png)
+![Comprovació del hostname i FQDN](./img/img12.png)
 
 # 4. Canvi de la contrasenya de l'usuari
 
@@ -173,7 +173,7 @@ El sistema ens demana la contrasenya actual i posteriorment la nova contrasenya 
 
 El missatge final confirma que la contrasenya s'ha actualitzat correctament.
 
-![Canvi de la contrasenya](./img/img12.png)
+![Canvi de la contrasenya](./img/img13.png)
 
 # 5. Gestió de la instal·lació d'aplicacions
 
@@ -187,7 +187,7 @@ apt search btop
 
 El resultat mostra el paquet `btop` disponible als repositoris.
 
-![Cerca del paquet btop](./img/img13.png)
+![Cerca del paquet btop](./img/img14.png)
 
 ## 5.2 Informació del paquet btop
 
@@ -209,7 +209,7 @@ La informació mostra, entre altres dades:
 * **Homepage:** projecte oficial de btop
 * **Description:** monitor de recursos de la línia d'ordres.
 
-![Informació del paquet btop](./img/img14.png)
+![Informació del paquet btop](./img/img15.png)
 
 ## 5.3 Comprovació del funcionament de btop
 
@@ -217,7 +217,7 @@ Una vegada instal·lat, executem `btop` per comprovar el seu funcionament.
 
 El programa mostra informació en temps real sobre el processador, la memòria, els discos, la xarxa i els processos del sistema.
 
-![Programa btop funcionant](./img/img15.png)
+![Programa btop funcionant](./img/img16.png)
 
 ## 5.4 Cerca del paquet lsd
 
@@ -229,7 +229,7 @@ apt search lsd
 
 El resultat mostra que el paquet `lsd` està disponible i que és una alternativa a la comanda tradicional `ls`.
 
-![Cerca del paquet lsd](./img/img16.png)
+![Cerca del paquet lsd](./img/img17.png)
 
 ## 5.5 Informació del paquet lsd
 
@@ -241,7 +241,7 @@ apt show lsd
 
 El paquet correspon a una alternativa moderna a `ls`, amb opcions de formatació i colors.
 
-![Informació del paquet lsd](./img/img17.png)
+![Informació del paquet lsd](./img/img18.png)
 
 ## 5.6 Instal·lació de lsd
 
@@ -253,7 +253,7 @@ sudo apt install lsd
 
 El sistema mostra els paquets que s'instal·laran i les dependències necessàries abans de continuar.
 
-![Instal·lació del paquet lsd](./img/img18.png)
+![Instal·lació del paquet lsd](./img/img19.png)
 
 ## 5.7 Instal·lació d'Apache2
 
@@ -265,7 +265,7 @@ sudo apt install apache2
 
 El sistema mostra els paquets i les dependències que s'instal·laran.
 
-![Instal·lació d'Apache2](./img/img19.png)
+![Instal·lació d'Apache2](./img/img20.png)
 
 ## 5.8 Comprovar l'estat d'Apache2
 
@@ -277,7 +277,7 @@ systemctl status apache2
 
 El resultat mostra que el servei està **active (running)** i, per tant, Apache està funcionant correctament.
 
-![Estat del servei Apache2](./img/img20.png)
+![Estat del servei Apache2](./img/img21.png)
 
 ## 5.9 Desinstal·lació d'Apache2
 
@@ -289,7 +289,7 @@ sudo apt purge apache2
 
 La comanda mostra que el paquet `apache2` serà eliminat.
 
-![Desinstal·lació d'Apache2](./img/img21.png)
+![Desinstal·lació d'Apache2](./img/img22.png)
 
 ## 5.10 Comprovar que Apache2 ha estat eliminat
 
@@ -307,7 +307,7 @@ Unit apache2.service could not be found.
 
 Això confirma que el servei Apache2 ja no està instal·lat.
 
-![Comprovació de la desinstal·lació d'Apache2](./img/img22.png)
+![Comprovació de la desinstal·lació d'Apache2](./img/img23.png)
 
 ## 5.11 Instal·lació de Micro amb Snap
 
@@ -325,7 +325,7 @@ snap list
 
 En el resultat apareix el paquet `micro`, indicant que s'ha instal·lat correctament.
 
-![Instal·lació de Micro i comprovació amb Snap](./img/img23.png)
+![Instal·lació de Micro i comprovació amb Snap](./img/img24.png)
 
 ## 5.12 Actualitzar Micro
 
@@ -337,7 +337,7 @@ sudo snap refresh micro
 
 Com que el paquet s'acaba d'instal·lar, el sistema indica que no hi ha actualitzacions disponibles.
 
-![Actualització de Micro](./img/img24.png)
+![Actualització de Micro](./img/img25.png)
 
 ## 5.13 Desinstal·lar Micro
 
@@ -355,7 +355,7 @@ snap list
 
 El paquet `micro` ja no apareix a la llista, de manera que s'ha eliminat correctament.
 
-![Desinstal·lació de Micro](./img/img25.png)
+![Desinstal·lació de Micro](./img/img26.png)
 
 # 6. Configuracions d'hora, teclat i idioma
 
@@ -375,7 +375,7 @@ Etc/UTC
 
 També podem observar que la sincronització del rellotge està activa.
 
-![Configuració inicial de l'hora](./img/img26.png)
+![Configuració inicial de l'hora](./img/img27.png)
 
 ## 6.2 Configurar la zona horària
 
@@ -399,7 +399,7 @@ Europe/Madrid
 
 La sincronització del rellotge continua activa.
 
-![Zona horària Europe/Madrid](./img/img27.png)
+![Zona horària Europe/Madrid](./img/img28.png)
 
 ## 6.3 Configuració del teclat
 
@@ -411,7 +411,7 @@ sudo dpkg-reconfigure keyboard-configuration
 
 Apareix l'assistent de configuració del teclat, on podem seleccionar el model de teclat adequat.
 
-![Configuració del teclat](./img/img28.png)
+![Configuració del teclat](./img/img29.png)
 
 ## 6.4 Comprovar la configuració de l'idioma
 
@@ -429,7 +429,7 @@ es_ES.UTF-8
 
 Aquesta configuració s'aplica a variables com `LANG`, `LC_TIME`, `LC_MESSAGES`, `LC_MONETARY`, entre altres.
 
-![Configuració actual de locale](./img/img29.png)
+![Configuració actual de locale](./img/img30.png)
 
 ## 6.5 Reconfigurar les locales
 
@@ -441,7 +441,7 @@ sudo dpkg-reconfigure locales
 
 Aquesta eina permet seleccionar i configurar les localitzacions disponibles al sistema.
 
-![Reconfiguració de les locales](./img/img30.png)
+![Reconfiguració de les locales](./img/img31.png)
 
 # 7. Explorant arxius de configuració
 
@@ -461,7 +461,7 @@ El resultat mostra el fitxer:
 
 Aquest és el fitxer de configuració de Netplan que es troba dins de `/etc`.
 
-![Cerca de fitxers YAML](./img/img31.png)
+![Cerca de fitxers YAML](./img/img32.png)
 
 ## 7.2 Buscar carpetes relacionades amb SSH
 
@@ -481,7 +481,7 @@ La comanda localitza diverses carpetes relacionades amb SSH, entre elles:
 /etc/systemd/system/sshd@.service.wants
 ```
 
-![Cerca de carpetes SSH](./img/img32.png)
+![Cerca de carpetes SSH](./img/img33.png)
 
 ## 7.3 Buscar fitxers grans i mostrar la configuració SSH
 
