@@ -1,134 +1,605 @@
-En aquesta primera activitat ens centrarem a l'administració bàsica d'un servidor Linux. Començarem amb un canvi respecte a com heu estat treballant amb màquines virtuals fins ara, ja no hi accedirem a la màquina a través de l'entorn virtual, sinó que ho farem a través d'una connexió remota amb SSH.
+# 1. Connexió remota amb SSH
 
-El motiu, és doble, d'una banda, poder treballar des del terminal de l'equip Windows facilita la feina, i fa que accions com copiar i enganxar siguin més senzilles, i d'altra banda, ens acostuma a la manera de treballar amb servidors reals, que normalment són virtuals i es troben a centres de dades no accessibles físicament.
+## 1.1 Comprovació de les adreces IP
 
-sox-ud2
+Primer executem la comanda `ip a` per consultar les adreces IP de la màquina virtual.
 
-Veurem les accions bàsiques d'administració: gestió paquets, actualització del sistema i les configuracions bàsiques: xarxa, hora, teclat, etc.
+En el resultat podem observar diferents interfícies de xarxa. La interfície `enp0s3` té l'adreça `10.0.2.15` i la interfície `enp0s8` té l'adreça `192.168.56.101`.
 
-Finalment, exportarem la nostra màquina virtual a un fitxer que podrem importar en altres equips, i que ens permetrà tenir una còpia de seguretat del nostre treball.
+La interfície `enp0s8`, amb l'adreça `192.168.56.101`, correspon a la xarxa **host-only** i és la que utilitzarem per connectar-nos des de l'equip Windows.
 
-Durada de l'activitat
-La durada prevista de l'activitat és 4 hores a classe.
+![Comprovació de les adreces IP](./img/img2.png)
 
-Objectius específics de l'activitat
-Configuració bàsica d'un servidor GNU/Linux.
-Gestió de màquines virtuals.
-Competències treballades
-c) Instal·lar i configurar programari bàsic i d’aplicació, assegurant-ne el funcionament en condicions de qualitat i seguretat.
+## 1.2 Connexió SSH des de Windows
 
-Resultats d'aprenentatge i criteris d'avaluació
-RA1. Instal·la sistemes operatius en xarxa descrivint-ne les característiques i interpretant-ne la documentació tècnica.
+Des del terminal de Windows executem la comanda:
 
-1.5 Selecciona els components a instal·lar.
-1.7 Aplica preferències en la configuració de l'entorn personal.
-1.8 Actualitza el sistema operatiu en xarxa.
-1.9 Comprova la connectivitat del servidor amb els equips client
-Continguts
-Instal·lació de sistemes operatius en xarxa
-Capacitats clau treballades
-Autonomia
-Organització del treball
-Responsabilitat
-Semàfor ús de la IA
-🟠 Aquesta activitat permet un ús parcial o restringit.
+```bash
+ssh user@192.168.56.101
+```
 
-Permès per com a eina de suport en la millora de la redacció dels informes, cerca preliminar d'informació, estructuració d'idees o explicació de conceptes teòrics complexos.
+Com que és la primera vegada que ens connectem a aquesta màquina virtual, apareix un missatge d'advertència indicant que l'autenticitat de l'equip no es pot establir.
 
-Condicions: Cal processar, entendre i validar sempre els resultats rebuts. Està totalment prohibit copiar l'enunciat d'un exercici directament al xat de la IA i enganxar la resposta generada per al lliurament final sense treball propi ni anàlisi crítica.
+Per continuar amb la connexió escrivim `yes`.
 
-Enunciat de l'activitat
-Requisits previs
-Necessitem la màquina virtual amb Ubuntu Server 26.04 LTS que hem creat a l'activitat anterior. Si la màquina virtual no té el servei SSH instal·lat, caldrà instal·lar-lo amb la comanda sudo apt install ssh.
+![Primera connexió SSH](./img/img3.png)
 
-Descripció de l'activitat
-Documenta amb captures de pantalla i explicacions els següents passos:
+# 2. Actualitzacions del sistema
 
-Connexió remota amb SSH a la màquina virtual Ubuntu Server 26.04 LTS.
+## 2.1 Simulació de l'actualització
 
-Executa la comanda ip a per obtenir les adreces IP de la màquina virtual. Identifica la segona, que correspon a la interfície host-only i que és la que utilitzarem per connectar-nos a la màquina virtual des de l'equip Windows.
+Abans de realitzar l'actualització podem simular-la amb:
 
-Obre Terminala l'equip Windows i executa la comanda ssh usuari@adreça_ip, on nom_usuari és el nom d'usuari que has creat a la màquina virtual i adreça_ip és l'adreça IP que has identificat a l'apartat anterior.
+```bash
+apt -s upgrade
+```
 
-Observa com apareix un missatge d'advertència indicant que la clau de l'equip no és coneguda. Accepta-la i introdueix la contrasenya de l'usuari. Aquest missatge només apareixerà la primera vegada que et connectis a la màquina virtual.
+La simulació indica que hi ha **13 paquets que es poden actualitzar**. També mostra que hi ha un paquet que encara no s'actualitza a causa d'una actualització gradual (*phasing*):
 
-⚠️Si més endanvant, una nova màquina virtual té la mateixa adreça IP, et donarà un error de clau no vàlida. En aquest cas, caldrà eliminar la clau antiga amb la comanda ssh-keygen -R adreça_ip i tornar a connectar-se.
+```text
+rust-coreutils
+```
 
-Actualitzacions del sistema
+Per tant, no es mostra cap conflicte de dependències que impedeixi continuar amb l'actualització.
 
-Comprova si el sistema té actualitzacions disponibles. Mostra la comanda que has utilitzat i el resultat obtingut (no cal mostrar la totalitat dels paquets).
+![Simulació de l'actualització](./img/img4.png)
 
-Simula el resultat d'una actualització amb apt -s upgrade. Indica si mostra algun tipus de conflicte o dependència que caldria resoldre abans d'actualitzar.
+# 3. Canviant el nom de l'equip
 
-Actualitza el sistema.
+## 3.1 Comprovar el nom actual
 
-⚠️ Tot i que és molt important mantenir els sistemes actualitzats, en entorns de producció, sobretot si tenen serveis crítics, caldrà planificar les actualitzacions per assegurar-se que no es trenqui cap dependència i que els serveis continuïn funcionant correctament. Es recomana la lectura de l'article de G. Garcia "Hay paquetes pendientes de actualizar: ¿actualizo o no?" que teniu accessible a la secció de Materials de suport.
+Executem la comanda:
 
-Canviant el nom de l'equip
+```bash
+hostnamectl
+```
 
-Executa la comanda hostnamectl i observa la informació que mostra. Fixa't en el camp Static hostname, que és el nom actual de l'equip.
+En el resultat podem observar que inicialment el **Static hostname** és `server` i el **Icon name** és `computer-vm`.
 
-Anem a canviar el nom de l'equip (static hostname) amb la comanda sudo hostnamectl set-hostname nom_equip. Mostra les captures de pantalla i explica els passos que has seguit. Tria un com a nom sox-<abc>, on <abc> són les inicials del teu nom. Així per exemple, si el teu nom és Joan Garcia Martí, el nom de l'equip serà sox-jgm.
+També podem veure que el sistema és Ubuntu 26.04.1 LTS i que la màquina virtual funciona sobre VirtualBox.
 
-Canviem el "icon name" o nom descriptiu de l'equip amb la comanda sudo hostnamectl set-icon-name nom_descriptiu. Mostra les captures de pantalla i explica els passos que has seguit. Tria un nom descriptiu que representi el teu equip, per exemple "Servidor de Joan Garcia Martí".
+![Configuració inicial del hostname](./img/img5.png)
 
-Comprova el canvi amb la comanda hostnamectl i mostra el resultat.
+## 3.2 Canviar el nom de l'equip
 
-Comprova quin resultat et mostra la comanda hostname i explica la diferència amb el resultat de la comanda hostnamectl.
+Canviem el nom de l'equip amb:
 
-Tot i que la comanda hostnamectl canvia el nom de l'equip de manera permanent, cal actualitzar el fitxer /etc/hosts per assegurar que el nom de l'equip es resol correctament. Edita el fitxer amb la comanda sudo nano /etc/hosts per actualitzar la informació del nom de l'equip, afegint també un nom de domini (la resta de l'arxiu s'ha deixar com està).
+```bash
+sudo hostnamectl set-hostname sox-hrl
+```
 
+Després intentem canviar el nom descriptiu amb:
+
+```bash
+sudo hostnamectl set-icon-name Servidor de Hector Rabasso
+```
+
+En aquest cas apareix l'error:
+
+```text
+Too many arguments.
+```
+
+Això passa perquè el nom descriptiu conté diversos espais. Per solucionar-ho, posem el nom entre cometes:
+
+```bash
+sudo hostnamectl set-icon-name "Servidor de Hector Rabasso"
+```
+
+![Canvi del hostname i del nom descriptiu](./img/img6.png)
+
+## 3.3 Comprovar la nova configuració
+
+Tornem a executar:
+
+```bash
+hostnamectl
+```
+
+Ara podem comprovar que el **Static hostname** ha canviat a:
+
+```text
+sox-hrl
+```
+
+I el **Icon name** és:
+
+```text
+Servidor de Hector Rabasso
+```
+
+![Comprovació del nou hostname](./img/img7.png)
+
+## 3.4 Comprovar la comanda hostname
+
+Executem:
+
+```bash
+hostname
+```
+
+El resultat és:
+
+```text
+sox-hrl
+```
+
+La comanda `hostname` mostra únicament el nom actual de l'equip.
+
+![Comanda hostname](./img/img8.png)
+
+## 3.5 Configuració del fitxer /etc/hosts
+
+Editem el fitxer `/etc/hosts` amb:
+
+```bash
+sudo nano /etc/hosts
+```
+
+Afegim la correspondència entre l'adreça local i el nom complet de l'equip:
+
+```text
 127.0.0.1 localhost
-127.0.1.1 server-abc.sox.test server-abc
-Comprova quin resultat et mostra la comanda hostname -f i explica la diferència amb el resultat de la comanda hostname.
-Canvi de la contrasenya usuari actual (administrador)
+127.0.1.1 sox-hrl.sox.test sox-hrl
+```
 
-Executa la comanda passwd i canvia la contrasenya de l'usuari usuari que has creat a la màquina virtual, posa un triat per tu.
-Gestió de la instal·lació d'aplicacions
+D'aquesta manera, el sistema pot relacionar el nom de l'equip amb el domini `sox.test`.
 
-Cerca el paquet btop per verificar que existeix als repositoris.
+![Configuració del fitxer /etc/hosts](./img/img9.png)
 
-Mostra la informació del paquet btop amb la comanda apt show btop. Documenta la informació que mostra la comanda.
+## 3.6 Comprovar hostname i hostname -f
 
-Instal·la l'aplicació btop amb la comanda sudo apt install btop. Un cop finalitzada la instal·lació, obre el programa per comprovar que funciona correctament.
+Primer executem:
 
-Cerca la informació relativa al paquet lsd. Instal·la el paquet lsd i comprova el seu funcionament com alternativa a la comanda ls.
+```bash
+hostname
+```
 
-Instal·la el paquet apache2 amb la comanda sudo apt install apache2. Un cop finalitzada la instal·lació, comprova que el servei està actiu amb la comanda systemctl status apache2.
+El resultat és:
 
-Desinstal·la el paquet netejant també els fitxers de configuració (opció purge) amb la comanda sudo apt purge apache2. Comprova que el servei ja no està actiu amb la comanda systemctl status apache2.
+```text
+sox-hrl
+```
 
-Provem ara a instal·lar un paquet de tipus snap. Instal·la el paquet micro amb la comanda sudo snap install micro --classic. Un cop finalitzada la instal·lació, comprova que el servei està instal·lat amb la comanda snap list. Obre el programa i comprova que el programa funciona correctament.
+Després executem:
 
-⚠️ El paràmetre --classic és necessari per a alguns paquets que necessiten accedir a parts del sistema que no estan disponibles amb el confinament de seguretat que utilitza snap. Per això, caldrà afegir aquest paràmetre a la comanda d'instal·lació.
+```bash
+hostname -f
+```
 
-Actualitza el paquet micro amb la comanda sudo snap refresh micro. Com just l'acabes d'instal·lar, no farà res, però és important conèixer la comanda.
+El resultat és:
 
-Desinstal·la el paquet micro amb la comanda sudo snap remove micro. Comprova que el servei ja no està actiu amb la comanda snap list.
+```text
+sox-hrl.sox.test
+```
 
-› 💡 Tot i que per l'activitat cal desinstal·lar l'editor microsi veus que t'agrada més que el tradicional nano, pots tornar a instal·lar-lo per fer-lo servir al llarg de les activitats.
+La diferència és que `hostname` mostra només el nom de l'equip, mentre que `hostname -f` mostra el **nom de domini complet (FQDN)**.
 
-Configuracions hora, teclat i idioma
+![Comprovació del hostname i FQDN](./img/img10.png)
 
-Observa la configuració actual de la zona horària amb la comanda timedatectl.
+# 4. Canvi de la contrasenya de l'usuari
 
-Configura la zona horària amb la comanda sudo timedatectl set-timezone Europe/Madrid. Assegura't que la sincronització horària estigui activa. Mostra les captures de pantalla i explica els passos que has seguit.
+Per canviar la contrasenya de l'usuari actual executem:
 
-Configura el teclat amb la comanda sudo dpkg-reconfigure keyboard-configuration. I assegura't que la configuració sigui correcta. Mostra les captures de pantalla i explica els passos que has seguit.
+```bash
+passwd
+```
 
-Mostra la configuració actual de l'idioma amb la comanda locale. Documenta com es configura l'idioma amb la comanda sudo dpkg-reconfigure locales. Mostra les captures de pantalla i explica els passos que has seguit.
+El sistema ens demana la contrasenya actual i després la nova contrasenya dues vegades.
 
-Explorant arxius de configuració
+Finalment apareix el missatge:
 
-La carpeta /etc conté els fitxers de configuració del sistema i està ple de subcarpetes. Començarem buscant fitxers per nom, extensió i mida.
+```text
+passwd: contraseña actualizada correctamente
+```
 
-Troba la ruta exacta dels fitxers de configuració que tinguin extensió .yaml amb la comanda find /etc -type f -name "*.yaml". Mostra la comanda i el resultat obtingut.
+Això confirma que la contrasenya s'ha canviat correctament.
 
-Ara buscarem les carpetes que continguin la paraula "ssh" dins de /etc amb la comanda find /etc -type d -name "*ssh*". Mostra la comanda i el resultat obtingut.
+![Canvi de la contrasenya](./img/img11.png)
 
-Localitza fitxers grans: Busca quins fitxers de configuració o logs dins de /var/log ocupen més de 10 Megabytes (útil per quan un servidor es queda sense espai):
+# 5. Gestió de la instal·lació d'aplicacions
 
-   find /var/log -type f -size +10M
-Mostra el fitxer de configuració del servei SSH, però omet totes les línies que siguin comentaris (#) o estiguin buides:
-   grep -vE '^\s*#|^\s*$' /etc/ssh/sshd_config
-› El paràmetre -v inverteix la cerca —mostra el que NO coincideix— i -E activa les expressions regulars per detectar el símbol # a l'inici de línia ^ o línies buides ^$. A l'article "Guía completa del comando grep en Linux" teniu més informació sobre com utilitzar aquesta comanda.
+## 5.1 Cerca del paquet btop
+
+Primer comprovem si el paquet `btop` existeix als repositoris amb:
+
+```bash
+apt search btop
+```
+
+El resultat mostra que el paquet `btop` està disponible als repositoris. També podem observar la seva versió:
+
+```text
+btop/resolute 1.4.6-2 amd64
+```
+
+![Cerca del paquet btop](./img/img12.png)
+
+## 5.2 Informació del paquet btop
+
+Consultem la informació del paquet amb:
+
+```bash
+apt show btop
+```
+
+Entre la informació mostrada podem observar:
+
+* **Package:** btop
+* **Version:** 1.4.6-2
+* **Priority:** optional
+* **Section:** universe/utils
+* **Origin:** Ubuntu
+* **Installed-Size:** 1.804 kB
+* **Download-Size:** 604 kB
+* **Homepage:** https://github.com/aristocratos/btop
+
+També s'indica que és un monitor de recursos de línia d'ordres que permet consultar informació del processador, memòria, discos, xarxa i processos.
+
+![Informació del paquet btop](./img/img13.png)
+
+## 5.3 Comprovació del funcionament de btop
+
+Executem `btop` per comprovar que funciona correctament.
+
+El programa mostra informació en temps real sobre la CPU, la memòria, els discos, la xarxa i els processos que s'estan executant.
+
+![Programa btop funcionant](./img/img14.png)
+
+## 5.4 Cerca del paquet lsd
+
+Busquem el paquet `lsd` amb:
+
+```bash
+apt search lsd
+```
+
+El resultat mostra que el paquet `lsd` està disponible als repositoris.
+
+La seva descripció indica que és una alternativa a la comanda `ls`, amb més opcions de formatació i colors.
+
+![Cerca del paquet lsd](./img/img15.png)
+
+## 5.5 Informació del paquet lsd
+
+Consultem la informació del paquet amb:
+
+```bash
+apt show lsd
+```
+
+Podem observar que la versió disponible és `1.2.0-1` i que el paquet correspon a una alternativa moderna a `ls`.
+
+![Informació del paquet lsd](./img/img16.png)
+
+## 5.6 Instal·lació de lsd
+
+Instal·lem el paquet amb:
+
+```bash
+sudo apt install lsd
+```
+
+El sistema mostra que s'instal·laran `lsd` i les seves dependències:
+
+```text
+fonts-font-awesome
+libgit2-1.9
+```
+
+Abans de continuar, el sistema demana confirmació amb:
+
+```text
+¿Continuar? [S/n]
+```
+
+![Instal·lació del paquet lsd](./img/img17.png)
+
+## 5.7 Instal·lació d'Apache2
+
+Instal·lem el servidor web Apache amb:
+
+```bash
+sudo apt install apache2
+```
+
+El sistema mostra el paquet `apache2` i les seves dependències.
+
+En aquest cas s'indica que s'instal·laran 10 paquets i que es necessiten aproximadament 8,2 MB d'espai.
+
+Abans de continuar, demana confirmació:
+
+```text
+¿Continuar? [S/n]
+```
+
+![Instal·lació d'Apache2](./img/img18.png)
+
+## 5.8 Comprovar l'estat d'Apache2
+
+Una vegada instal·lat, comprovem l'estat del servei amb:
+
+```bash
+systemctl status apache2
+```
+
+El resultat mostra:
+
+```text
+Active: active (running)
+```
+
+Per tant, el servei Apache està actiu i funcionant correctament.
+
+![Estat del servei Apache2](./img/img19.png)
+
+## 5.9 Desinstal·lació d'Apache2
+
+Per eliminar Apache i els seus fitxers de configuració utilitzem:
+
+```bash
+sudo apt purge apache2
+```
+
+El sistema indica que s'eliminarà el paquet:
+
+```text
+apache2*
+```
+
+També mostra que s'alliberaran aproximadament 472 kB d'espai.
+
+Abans de continuar, demana confirmació amb:
+
+```text
+¿Continuar? [S/n]
+```
+
+![Desinstal·lació d'Apache2](./img/img20.png)
+
+## 5.10 Comprovar que Apache2 ha estat eliminat
+
+Després de desinstal·lar Apache executem:
+
+```bash
+systemctl status apache2
+```
+
+El sistema mostra:
+
+```text
+Unit apache2.service could not be found.
+```
+
+Això indica que el servei `apache2` ja no està disponible perquè ha estat desinstal·lat.
+
+![Comprovació de la desinstal·lació d'Apache2](./img/img21.png)
+
+## 5.11 Instal·lació de Micro amb Snap
+
+Instal·lem l'editor `micro` mitjançant Snap amb:
+
+```bash
+sudo snap install micro --classic
+```
+
+El resultat indica que s'ha instal·lat correctament la versió:
+
+```text
+micro 2.0.15
+```
+
+![Instal·lació de Micro](./img/img22.png)
+
+Després executem:
+
+```bash
+snap list
+```
+
+Podem observar que `micro` apareix a la llista de paquets Snap instal·lats.
+
+![Llista de paquets Snap](./img/img23.png)
+
+## 5.12 Actualitzar Micro
+
+Executem:
+
+```bash
+sudo snap refresh micro
+```
+
+Com que acabem d'instal·lar el paquet, no hi ha cap actualització disponible.
+
+El sistema mostra:
+
+```text
+snap "micro" has no updates available
+```
+
+![Actualització de Micro](./img/img24.png)
+
+## 5.13 Desinstal·lar Micro
+
+Finalment eliminem Micro amb:
+
+```bash
+sudo snap remove micro
+```
+
+El sistema confirma:
+
+```text
+micro removed
+```
+
+Després executem:
+
+```bash
+snap list
+```
+
+El paquet `micro` ja no apareix a la llista.
+
+![Desinstal·lació de Micro](./img/img25.png)
+
+# 6. Configuracions d'hora, teclat i idioma
+
+## 6.1 Comprovar la zona horària actual
+
+Executem:
+
+```bash
+timedatectl
+```
+
+Inicialment, la zona horària configurada és:
+
+```text
+Etc/UTC
+```
+
+També podem observar que:
+
+```text
+System clock synchronized: yes
+NTP service: active
+```
+
+Per tant, la sincronització horària està activa.
+
+![Configuració inicial de l'hora](./img/img26.png)
+
+## 6.2 Configurar la zona horària
+
+Canviem la zona horària a Madrid amb:
+
+```bash
+sudo timedatectl set-timezone Europe/Madrid
+```
+
+Després tornem a comprovar la configuració amb:
+
+```bash
+timedatectl
+```
+
+Ara la zona horària és:
+
+```text
+Europe/Madrid (CEST, +0200)
+```
+
+La sincronització del rellotge continua activa i el servei NTP també apareix com a `active`.
+
+![Zona horària Europe/Madrid](./img/img27.png)
+
+## 6.3 Configuració del teclat
+
+Per configurar el teclat utilitzem:
+
+```bash
+sudo dpkg-reconfigure keyboard-configuration
+```
+
+Apareix l'assistent de configuració del teclat. En la pantalla mostrada podem seleccionar el model de teclat.
+
+En aquest cas apareix seleccionada l'opció:
+
+```text
+Generic 105-key PC
+```
+
+![Configuració del teclat](./img/img28.png)
+
+## 6.4 Comprovar la configuració de l'idioma
+
+Executem:
+
+```bash
+locale
+```
+
+La configuració regional del sistema és `es_ES.UTF-8`.
+
+Podem observar que les diferents variables, com `LANG`, `LANGUAGE`, `LC_TIME`, `LC_MONETARY` i `LC_MESSAGES`, utilitzen aquesta configuració.
+
+![Configuració actual de locale](./img/img29.png)
+
+## 6.5 Reconfigurar les locales
+
+Per configurar les localitzacions disponibles utilitzem:
+
+```bash
+sudo dpkg-reconfigure locales
+```
+
+Aquesta comanda inicia l'eina de configuració de les locals del sistema.
+
+![Reconfiguració de les locales](./img/img30.png)
+
+# 7. Explorant arxius de configuració
+
+## 7.1 Buscar fitxers .yaml
+
+Per localitzar els fitxers amb extensió `.yaml` dins de `/etc` utilitzem:
+
+```bash
+sudo find /etc -type f -name "*.yaml"
+```
+
+El resultat mostra:
+
+```text
+/etc/netplan/00-installer-config.yaml
+```
+
+Aquest és el fitxer de configuració de Netplan que es troba dins de `/etc`.
+
+![Cerca de fitxers YAML](./img/img31.png)
+
+## 7.2 Buscar carpetes relacionades amb SSH
+
+Utilitzem:
+
+```bash
+sudo find /etc -type d -name "*ssh*"
+```
+
+La comanda localitza diferents carpetes relacionades amb SSH, entre elles:
+
+```text
+/etc/ssh/ssh_config.d
+/etc/ssh/sshd_config.d
+/etc/systemd/system/ssh.service.requires
+/etc/systemd/system/ssh.service.wants
+/etc/systemd/system/ssh.socket.wants
+/etc/systemd/system/sshd.service.wants
+/etc/systemd/system/sshd@.service.wants
+```
+
+![Cerca de carpetes SSH](./img/img32.png)
+
+## 7.3 Buscar fitxers grans i mostrar la configuració SSH
+
+Primer busquem els fitxers de `/var/log` que ocupen més de 10 MB:
+
+```bash
+sudo find /var/log -type f -size +10M
+```
+
+A continuació intentem mostrar la configuració SSH sense comentaris ni línies buides amb:
+
+```bash
+sudo grep -vE '^\s*#|^\s*$' /etc/ssh/sshd_conf
+```
+
+En aquest cas apareix un error perquè la ruta utilitzada no existeix:
+
+```text
+grep: /etc/ssh/sshd_conf: No such file or directory
+```
+
+Per tant, la captura mostra que s'ha utilitzat `sshd_conf`, però el fitxer correcte de configuració és `sshd_config`.
+
+![Cerca de fitxers grans i configuració SSH](./img/img33.png)
