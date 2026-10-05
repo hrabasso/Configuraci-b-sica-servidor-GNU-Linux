@@ -20,9 +20,6 @@ En ser la primera connexió, apareix un avís indicant que l'autenticitat de l'e
 
 ![Primera connexió SSH](./img/img3.png)
 
-Després d'acceptar la clau, introduïm la contrasenya de l'usuari per completar la connexió remota.
-
-![Acceptació de la clau SSH](./img/img4.png)
 
 # 2. Actualitzacions del sistema
 
